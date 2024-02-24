@@ -54,6 +54,33 @@ Variational Autoencoders (VAEs) are a type of generative model that learns to en
 ### Large Language Models (LLMs)
 Large Language Models (LLMs) are deep learning models trained on vast amounts of text data to understand and generate human-like text. They are capable of tasks such as language translation, text summarization, and question answering.
 
+##### Overview
+Large Language Models (LLM) are advanced architectures designed to handle complex natural language processing (NLP) tasks. This Readme provides an overview of different model architectures used in LLMs, with a focus on those extensively used in the field, along with reasons for their prominence.
+
+##### Model Architectures
+1. Transformer-based Models
+Transformer architecture, as introduced by Vaswani et al. in "Attention is All You Need," is a pivotal advancement in NLP. Several prominent LLMs are built upon the Transformer architecture, including:
+
+BERT (Bidirectional Encoder Representations from Transformers)
+GPT (Generative Pre-trained Transformer)
+RoBERTa (Robustly optimized BERT approach)
+2. LSTM (Long Short-Term Memory) Networks
+LSTM networks, a type of recurrent neural network (RNN), are adept at learning long-term dependencies in sequential data. While historically significant in NLP, Transformer-based architectures have largely surpassed LSTMs due to superior performance on large-scale datasets.
+
+3. CNN (Convolutional Neural Network) Architectures
+Although more common in computer vision tasks, CNNs have been applied in NLP for tasks such as text classification and sentiment analysis. However, they are less prevalent in large language models compared to Transformer-based architectures.
+
+##### Reasons for Prominence
+Among these architectures, Transformer-based models like BERT, GPT, and their variants are extensively used in NLP applications for several reasons:
+Performance: Transformer-based models consistently achieve state-of-the-art performance across various NLP tasks.
+Scalability: These models can efficiently scale to large datasets and compute resources, making them suitable for training on massive text corpora.
+Flexibility: Transformer-based architectures support transfer learning, enabling fine-tuning on task-specific datasets after pre-training on large general-purpose datasets.
+Interpretability: While not inherently interpretable, Transformer-based models can be analyzed using attention visualization and probing tasks, providing insights into their text processing mechanisms.
+Conclusion
+In summary, Transformer-based architectures, particularly models like BERT and GPT, have become the preferred choice for many NLP applications due to their exceptional performance, scalability, flexibility, and interpretability.
+
+
+
 ## Machine Learning Operations (MLOps)
 Machine Learning Operations (MLOps) is a set of practices and tools for deploying, managing, and scaling machine learning models in production environments.
 
