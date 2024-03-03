@@ -1,8 +1,5 @@
 Creating a course on becoming a Generative AI expert on multiple cloud platforms (AWS, Azure, GCP) is a significant undertaking. Below, I outline a high-level plan for such a course, provide project ideas for each platform, and suggest topics for a basic to advanced level expertise. Please note that this is a broad overview, and you may need to dive deeper into each topic as you develop your course content.
 
-**Course Outline: Becoming a Generative AI Expert on AWS, Azure, and GCP**
-
-**Module 1: Introduction to Generative AI**
 - Introduction to Generative AI and its applications.
 - Overview of cloud platforms (AWS, Azure, GCP) for AI/ML.
 
