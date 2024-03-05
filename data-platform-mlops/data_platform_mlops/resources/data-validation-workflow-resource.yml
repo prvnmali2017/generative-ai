@@ -1,0 +1,41 @@
+new_cluster: &new_cluster
+  new_cluster:
+    num_workers: 3
+    spark_version: 13.3.x-cpu-ml-scala2.12
+    node_type_id: i3.xlarge
+    custom_tags:
+      clusterSource: mlops-stack/0.2
+
+common_permissions: &common_permissions
+  common_permissions:
+    - level: CAN_VIEW
+      group_name: users
+
+resources:
+  jobs:
+    batch_validation_job:
+      name: ${bundle.target}_data_platform_mlops_data_validation_job
+      tasks:
+        - task_key: batch_validation_task
+          <<: *new_cluster
+          notebook_task:
+            notebook_path: ../data_validation_tests/data_validation_tests.py
+            base_parameters:
+              catalog: pilot
+              schema: gold_nyc_flights
+              feature_table: nyc_flights_arrival_delay_features
+              training_table: nyc_flights_training
+              inference_table: nyc_flights_inference_prediction
+              date_column: time_hour
+      schedule:
+        quartz_cron_expression: "0 0 11 * * ?" # daily at 11am
+        timezone_id: UTC
+        pause_status: ${var.job_schedule}
+      <<: *common_permissions
+      email_notifications:
+        on_failure:
+          - venkatramanan.gopal@tabcorp.com.au
+          - kia.nikoo@tabcorp.com.au
+        on_success:
+          - venkatramanan.gopal@tabcorp.com.au
+          - kia.nikoo@tabcorp.com.au

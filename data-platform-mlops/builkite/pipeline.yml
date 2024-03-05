@@ -1,0 +1,178 @@
+# This buildkite Pipeline validates and deploys bundle config (ML resource config)
+# defined under data_platform_mlops/resources/* and data_platform_mlops/databricks.yml.
+# The bundle is validated (CI) upon making a PR against the development/staging/master branch.
+
+# Bundle resources defined for development are deployed when a PR is merged into the development branch.
+# Bundle resources defined for staging are deployed when a PR is merged into the staging branch.
+# Bundle resources defined for prod are deployed when a PR is merged into the master branch.
+ 
+common:
+  # Plugins
+  - python: &python
+      docker-compose#v3.0.3:
+        run: python-utils
+
+env:
+  DEV_AGENT_QUEUE: "tabcorp-data-platform-nonprod"
+  STG_AGENT_QUEUE: "tabcorp-data-platform-nonprod"
+  PRD_AGENT_QUEUE: "tabcorp-data-platform-prod"
+  
+
+steps:
+
+  # Development environment
+  - label: ":docker: Build and Run Unit Tests"
+    if: build.branch == "development"
+    env:
+      DATABRICKS_TOKEN: $DATABRICKS_NONPROD_DEV
+    key: dev_build_docker
+    agents:
+      queue: $DEV_AGENT_QUEUE
+    plugins:
+      - *python
+    commands: |
+      python --version 
+      pip3 install -r test-requirements.txt
+      pip3 install -r data_platform_mlops/requirements.txt
+      python -m pytest --junitxml=test-unit.xml
+
+  - label: ":databricks: Build and Deploy Asset Bundles"
+    if: build.branch == "development"
+    env:
+      DATABRICKS_TOKEN: $DATABRICKS_NONPROD_DEV
+    key: dev_build_bundle
+    agents:
+      queue: $DEV_AGENT_QUEUE
+    depends_on:
+      - dev_build_docker
+    plugins:
+      - *python
+    commands: |
+      cd data_platform_mlops
+      databricks bundle validate -t dev
+      databricks bundle deploy -t dev
+  
+  - block: "Validate the deployment changes"
+    prompt: "Are the artefacts deployed correctly? Please refer the testing instructions in confluence"
+    fields:
+      - text: "Please provide approval comment like success/failure"
+        key: "release-comment"
+    branches: "development"
+
+  - label: ":databricks: Cleanup the artefacts"
+    if: build.branch == "development"
+    env:
+      DATABRICKS_TOKEN: $DATABRICKS_NONPROD_DEV
+    key: dev_build_block
+    agents:
+      queue: $DEV_AGENT_QUEUE
+    plugins:
+      - *python
+    commands: |
+      cd data_platform_mlops
+      databricks bundle destroy -t dev --force-lock --auto-approve
+
+  # Staging environment
+  - label: ":docker: Build Docker Image & Unit Tests"
+    if: build.branch == "staging"
+    env:
+      DATABRICKS_TOKEN: $DATABRICKS_NONPROD_DEV
+    key: stage_build_docker
+    agents:
+      queue: $STG_AGENT_QUEUE
+    plugins:
+      - *python
+    commands: |
+      python --version 
+      pip3 install -r test-requirements.txt
+      pip3 install -r data_platform_mlops/requirements.txt
+      python -m pytest --junitxml=test-unit.xml
+
+  - label: ":databricks: Build Asset Bundles"
+    if: build.branch == "staging"
+    env:
+      DATABRICKS_TOKEN: $DATABRICKS_NONPROD_DEV
+    key: stage_build_bundle
+    agents:
+      queue: $STG_AGENT_QUEUE
+    depends_on:
+      - stage_build_docker
+    plugins:
+      - *python
+    commands: |
+      cd data_platform_mlops
+      databricks bundle validate -t staging
+      databricks bundle deploy -t staging
+
+  - block: "Validate the deployment changes"
+    prompt: "Are the artefacts deployed correctly? Please refer the testing instructions in confluence"
+    fields:
+      - text: "Please provide approval comment like success/failure"
+        key: "release-comment"
+    branches: "staging"
+
+  - label: ":databricks: Cleanup the artefacts"
+    if: build.branch == "staging"
+    env:
+      DATABRICKS_TOKEN: $DATABRICKS_NONPROD_DEV
+    key: staging_build_blocks
+    agents:
+      queue: $STG_AGENT_QUEUE
+    plugins:
+      - *python
+    commands: |
+      cd data_platform_mlops
+      databricks bundle destroy -t staging --force-lock --auto-approve
+
+  # Production environment
+  - label: ":docker: Build Docker & Unit Tests"
+    if: build.branch == "master"
+    env:
+      DATABRICKS_TOKEN: $TABCORP_DATABRICKS_TOKEN
+    key: prod_build_docker
+    agents:
+      queue: $PRD_AGENT_QUEUE
+    plugins:
+      - *python
+    commands: |
+      python --version 
+      pip3 install -r test-requirements.txt
+      pip3 install -r data_platform_mlops/requirements.txt
+      python -m pytest --junitxml=test-unit.xml
+
+  - label: ":databricks: Build Asset Bundles"
+    if: build.branch == "master"
+    env:
+      DATABRICKS_TOKEN: $TABCORP_DATABRICKS_TOKEN
+    key: prod_build_bundle
+    agents:
+      queue: $PRD_AGENT_QUEUE
+    depends_on:
+      - prod_build_docker
+    plugins:
+      - *python
+    commands: |
+      cd data_platform_mlops
+      databricks bundle validate -t prod
+      databricks bundle deploy -t prod
+
+  - block: "Validate the deployment changes"
+    prompt: "Are the artefacts deployed correctly? Please refer the testing instructions in confluence"
+    fields:
+      - text: "Please provide approval comment like success/failure"
+        key: "release-comment"
+    branches: "master"
+
+  - label: ":databricks: Cleanup the artefacts"
+    if: build.branch == "master"
+    env:
+      DATABRICKS_TOKEN: $TABCORP_DATABRICKS_TOKEN
+    key: prod_build_block
+    agents:
+      queue: $PRD_AGENT_QUEUE
+    plugins:
+      - *python
+    commands: |
+      cd data_platform_mlops
+      databricks bundle destroy -t prod --force-lock --auto-approve
+     

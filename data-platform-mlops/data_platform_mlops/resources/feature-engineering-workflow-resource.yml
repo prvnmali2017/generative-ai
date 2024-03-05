@@ -1,0 +1,52 @@
+new_cluster: &new_cluster
+  new_cluster:
+
+    num_workers: 3
+    spark_version: 13.3.x-cpu-ml-scala2.12
+    node_type_id: i3.xlarge
+    custom_tags:
+      clusterSource: mlops-stack/0.2
+
+common_permissions: &common_permissions
+  common_permissions:
+    - level: CAN_VIEW
+      group_name: users
+
+resources:
+  jobs:
+    write_feature_table_job:
+      name: ${bundle.target}_data_platform_mlops_write_feature_table_job
+      job_clusters:
+        - job_cluster_key: write_feature_table_job_cluster
+          <<: *new_cluster
+      tasks:
+        - task_key: ArrivalDelayFeatures
+          job_cluster_key: write_feature_table_job_cluster
+          notebook_task:
+            notebook_path: ../feature_engineering/notebooks/GenerateAndWriteFeatures.py
+            base_parameters:
+              # TODO modify these arguments to reflect your setup.
+              catalog: pilot
+              input_schema: gold_nyc_flights
+              output_schema: gold_nyc_flights
+              input_table: nyc_flights_training
+              output_table: nyc_flights_arrival_delay_features
+              features_module: arrival_delay_features
+              # git source information of current ML resource deployment. It will be persisted as part of the workflow run
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+      schedule:
+        quartz_cron_expression: "0 0 7 * * ?"
+        timezone_id: UTC
+        pause_status: ${var.job_schedule}
+      <<: *common_permissions
+      # If you want to turn on notifications for this job, please uncomment the below code,
+      # and provide a list of emails to the on_failure argument.
+      #
+      email_notifications:
+        on_failure:
+          - venkatramanan.gopal@tabcorp.com.au
+          - kia.nikoo@tabcorp.com.au
+        on_success:
+          - venkatramanan.gopal@tabcorp.com.au
+          - kia.nikoo@tabcorp.com.au
+

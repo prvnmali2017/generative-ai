@@ -1,0 +1,13 @@
+version: "3.11"
+services:
+  python-utils:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - AWS_SDK_LOAD_CONFIG=1
+      - DATABRICKS_TOKEN=${DATABRICKS_TOKEN:-}
+    entrypoint: ""
+    volumes:
+      - .:/work
+    working_dir: /work

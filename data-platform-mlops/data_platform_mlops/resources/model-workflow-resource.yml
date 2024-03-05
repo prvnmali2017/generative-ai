@@ -1,0 +1,78 @@
+new_cluster: &new_cluster
+  new_cluster:
+    num_workers: 3
+    spark_version: 13.3.x-cpu-ml-scala2.12
+    node_type_id: i3.xlarge
+    custom_tags:
+      clusterSource: mlops-stack/0.2
+
+common_permissions: &common_permissions
+  common_permissions:
+    - level: CAN_VIEW
+      group_name: users
+    - level: CAN_MANAGE
+      group_name: users
+
+resources:
+  jobs:
+    model_training_job:
+      name: ${bundle.target}_data_platform_mlops_model_training_job
+      job_clusters:
+        - job_cluster_key: model_training_job_cluster
+          <<: *new_cluster
+      tasks:
+        - task_key: Train
+          job_cluster_key: model_training_job_cluster
+          notebook_task:
+            notebook_path: ../training/notebooks/TrainWithFeatureStore.py
+            base_parameters:
+              catalog: pilot
+              input_schema: gold_nyc_flights
+              output_schema: gold_nyc_flights
+              input_table: nyc_flights_training
+              output_table: nyc_flights_inference
+              arrival_delay_features_table: pilot.gold_nyc_flights.nyc_flights_arrival_delay_features
+              experiment_name: ${var.experiment_name}
+              model_name:  pilot.gold_nyc_flights.${var.model_name}
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+        - task_key: ModelValidation
+          job_cluster_key: model_training_job_cluster
+          depends_on:
+            - task_key: Train
+          notebook_task:
+            notebook_path: ../validation/notebooks/ModelValidation.py
+            base_parameters:
+              experiment_name: ${var.experiment_name}
+              run_mode: dry_run
+              enable_baseline_comparison: "false"
+              validation_input: pilot.brnz_nyc_flights.nyc_flights_inference
+              model_type: regressor
+              targets: arr_delay
+              custom_metrics_loader_function: custom_metrics
+              validation_thresholds_loader_function: validation_thresholds
+              evaluator_config_loader_function: evaluator_config
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+        - task_key: ModelDeployment
+          job_cluster_key: model_training_job_cluster
+          depends_on:
+            - task_key: ModelValidation
+          notebook_task:
+            notebook_path: ../deployment/model_deployment/notebooks/ModelDeployment.py
+            base_parameters:
+              env: ${bundle.target}
+              # git source information of current ML resource deployment. It will be persisted as part of the workflow run
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+      schedule:
+        quartz_cron_expression: "0 0 9 * * ?" # daily at 9am
+        timezone_id: UTC
+        pause_status: ${var.job_schedule}
+      <<: *common_permissions
+      # If you want to turn on notifications for this job, please uncomment the below code,
+      # and provide a list of emails to the on_failure argument.
+      email_notifications:
+        on_failure:
+          - venkatramanan.gopal@tabcorp.com.au
+          - kia.nikoo@tabcorp.com.au
+        on_success:
+          - venkatramanan.gopal@tabcorp.com.au
+          - kia.nikoo@tabcorp.com.au

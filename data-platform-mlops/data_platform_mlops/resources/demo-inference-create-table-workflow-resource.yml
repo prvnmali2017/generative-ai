@@ -1,0 +1,25 @@
+new_cluster: &new_cluster
+  new_cluster:
+    num_workers: 1
+    spark_version: 14.1.x-cpu-ml-scala2.12
+    node_type_id: m5d.large
+    custom_tags:
+      clusterSource: mlops-stack/0.2
+
+common_permissions: &common_permissions
+  common_permissions:
+    - level: CAN_VIEW
+      group_name: users
+
+resources:
+  jobs:
+    write_demo_inference_table_job:
+      name: ${bundle.target}_data_platform_mlops_demo_inference_table_job
+      job_clusters:
+        - job_cluster_key: data_platform_mlops_demo_inference_table_job_cluster
+          <<: *new_cluster
+      tasks:
+        - task_key: ArrivalDelayFeatures
+          job_cluster_key: data_platform_mlops_demo_inference_table_job_cluster
+          notebook_task:
+            notebook_path: ../demo/inference_data.py

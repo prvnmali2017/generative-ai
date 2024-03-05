@@ -1,0 +1,68 @@
+# The name of the bundle. run `databricks bundle schema` to see the full bundle settings schema.
+bundle:
+  name: data_platform_mlops
+
+
+variables:
+  experiment_name:
+    description: Experiment name for the model training.
+    default: /Users/${workspace.current_user.userName}/${bundle.target}_data_platform_mlops_experiment
+  model_name:
+    description: Model name for the model training.
+    default: ${bundle.target}_data_platform_mlops_model
+  job_schedule:
+    description: Job status for the dev, stage, test and prod environment
+    default: PAUSED
+  catalog_name:
+    description: Different catalog and schema for each environment
+    default: hive_metastore
+  schema_name:
+    description: Different catalog and schema for each environment
+    default: default
+
+
+  # Resources folder contains ML artifact resources for the ml project that defines model and experiment
+  # And workflows resources for the ml project including model training -> validation -> deployment,
+  # feature engineerng,  batch inference, data monitoring, metric refresh, alerts and triggering retraining
+include:
+  - resources/*.yml
+
+
+# Deployment Target specific values for workspace
+targets:
+  dev:
+    variables:
+      job_schedule: PAUSED
+      catalog_name: ${bundle.target}
+      schema_name: datascience
+    workspace:
+      host: https://tabcorp-databricks-nonprod-dev.cloud.databricks.com
+      root_path: /Shared/data_science/${bundle.target}/${bundle.name}
+      pause_status: ${var.job_schedule}
+  staging:
+    variables:
+      job_schedule: PAUSED
+      catalog_name: dev
+      schema_name: datascience
+    workspace:
+      host: https://tabcorp-databricks-nonprod-dev.cloud.databricks.com
+      root_path: /Shared/data_science/${bundle.target}/${bundle.name}
+      pause_status: ${var.job_schedule}
+  test:
+    variables:
+      job_schedule: PAUSED
+      catalog_name: dev
+      schema_name: datascience
+    workspace:
+      host: https://tabcorp-databricks-nonprod-dev.cloud.databricks.com
+      root_path: /Shared/data_science/${bundle.target}/${bundle.name}
+      pause_status: ${var.job_schedule}
+  prod:
+    variables:
+      job_schedule: PAUSED
+      catalog_name: ${bundle.target}
+      schema_name: datascience
+    workspace:
+      host: https://tabcorp-databricks-prod-prod.cloud.databricks.com
+      root_path: /Shared/data_science/${bundle.target}/${bundle.name}
+      pause_status: ${var.job_schedule}
