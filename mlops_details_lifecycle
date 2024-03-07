@@ -1,0 +1,247 @@
+# MLOps Setup on Databricks + AWS
+
+## Deploy Code v1.0
+- Databricks Asset Bundles/ML Ops Stacks/YAML Pipelines
+- Feature Engineering
+- Hyper-parameter Tuning
+- ML Flow
+- Model Store integration (Unity Catalogue)
+- Model Deployment: Champion vs Challenger
+- Handover:
+  - Knowledge transfer
+  - Contextual Understanding
+  - Codebase Familiarization
+  - Ongoing/Outstanding Tasks & Responsibilities
+  - Documentation Review
+- Process Workflow and Governance Document
+
+## Deploy Code v2.0
+- Refinement of Hyper-parameter Tuning
+- Refinement of ML Flow
+
+## Online Learning
+- Code Template
+
+## Reinforcement Learning
+- Spike
+
+## Deploy Model v1.0
+- Handover:
+  - Knowledge transfer
+  - Contextual Understanding
+  - Codebase Familiarization
+  - Ongoing/Outstanding Tasks & Responsibilities
+  - Documentation Review
+- Process Workflow and Governance Document
+
+## Feature Store v1.0
+- Offline Serving
+- Online Serving
+- Handover:
+  - Knowledge transfer
+  - Contextual Understanding
+  - Codebase Familiarization
+  - Ongoing/Outstanding Tasks & Responsibilities
+  - Documentation Review
+- Process Workflow and Governance Document
+
+## Model Serving
+- Batch "Offline" Serving
+- Online Serving
+
+## Observability
+- Monitoring
+- Alerts
+- Dashboard
+
+## Infrastructure
+- Architecture Changes to Enable Deploy Model Pattern
+- Dedicated Buildkite Agent to ML Workloads
+- Instantiation of Staging Workspace/Environment
+- IDE Considerations (e.g., VS Code)
+- Jira and Github Integration
+- CI/CD Setup (Tooling, Process, Triggers)
+- Versioning Databricks Runtime
+- Customizing MLOps Stacks
+- Governance of MLOps Stacks
+- Document step-by-step processes, procedures, and interactions throughout SDLC.
+
+## Quality
+- Testing
+
+## Resources
+- Cost Observability (Tagging, Monitoring, Alerting)
+- Computation Management (Cluster, Pool)
+
+## Governance
+- Product Lifecycle Management
+- Change Management
+- Incident Response
+- Engagement Model
+- Standards and Conventions
+- RACI (Responsible, Accountable, Consulted, Informed) Matrix
+- Agile
+
+## Education
+- Git
+- Branching Strategy
+- Peer Reviews
+- Software Engineering Best Practices
+- Certification (e.g., Databricks)
+- Cultural Transformation: Continual Learning and Development Support, Knowledge Sharing
+
+## Other
+- Batch inference on training data
+- Scheduled batch inference on incoming data
+- Scheduled batch inference on training data for CT
+- Real-time inference on real data
+- Moving Large files that can't be committed to git
+- Data Store (source data)
+
+## Model Rebuilds
+- CLTV:
+  - Rebuild required due to legacy platform
+- Segmentation:
+  - Rebuild required due to legacy platform
+
+
+Here's the Markdown file with the provided contents:
+
+```markdown
+# MLOps Setup on Databricks + AWS
+
+## Deploy Code v1.0
+- Databricks Asset Bundles/ML Ops Stacks/YAML Pipelines
+- Feature Engineering
+- Hyper-parameter Tuning
+- ML Flow
+- Model Store integration (Unity Catalogue)
+- Model Deployment: Champion vs Challenger
+- Handover:
+  - Knowledge transfer
+  - Contextual Understanding
+  - Codebase Familiarization
+  - Ongoing/Outstanding Tasks & Responsibilities
+  - Documentation Review
+- Process Workflow and Governance Document
+
+## Deploy Code v2.0
+- Refinement of Hyper-parameter Tuning
+- Refinement of ML Flow
+
+## Online Learning
+- Code Template
+
+## Reinforcement Learning
+- Spike
+
+## Deploy Model v1.0
+- Handover:
+  - Knowledge transfer
+  - Contextual Understanding
+  - Codebase Familiarization
+  - Ongoing/Outstanding Tasks & Responsibilities
+  - Documentation Review
+- Process Workflow and Governance Document
+
+## Feature Store v1.0
+- Offline Serving
+- Online Serving
+- Handover:
+  - Knowledge transfer
+  - Contextual Understanding
+  - Codebase Familiarization
+  - Ongoing/Outstanding Tasks & Responsibilities
+  - Documentation Review
+- Process Workflow and Governance Document
+
+## Model Serving
+- Batch "Offline" Serving
+- Online Serving
+
+## Observability
+- Monitoring
+- Alerts
+- Dashboard
+
+## Infrastructure
+- Architecture Changes to Enable Deploy Model Pattern
+- Dedicated Buildkite Agent to ML Workloads
+- Instantiation of Staging Workspace/Environment
+- IDE Considerations (e.g., VS Code)
+- Jira and Github Integration
+- CI/CD Setup (Tooling, Process, Triggers)
+- Versioning Databricks Runtime
+- Customizing MLOps Stacks
+- Governance of MLOps Stacks
+- Document step-by-step processes, procedures, and interactions throughout SDLC.
+
+## Quality
+- Testing
+
+## Resources
+- Cost Observability (Tagging, Monitoring, Alerting)
+- Computation Management (Cluster, Pool)
+
+## Governance
+- Product Lifecycle Management
+- Change Management
+- Incident Response
+- Engagement Model
+- Standards and Conventions
+- RACI (Responsible, Accountable, Consulted, Informed) Matrix
+- Agile
+
+## Education
+- Git
+- Branching Strategy
+- Peer Reviews
+- Software Engineering Best Practices
+- Certification (e.g., Databricks)
+- Cultural Transformation: Continual Learning and Development Support, Knowledge Sharing
+
+## Other
+- Batch inference on training data
+- Scheduled batch inference on incoming data
+- Scheduled batch inference on training data for CT
+- Real-time inference on real data
+- Moving Large files that can't be committed to git
+- Data Store (source data)
+
+## Model Rebuilds
+- CLTV:
+  - Rebuild required due to legacy platform
+- Segmentation:
+  - Rebuild required due to legacy platform
+```
+
+Explanation:
+
+- **Deploy Code v1.0/v2.0**:
+  - Setting up code deployment processes with Databricks, including feature engineering, hyper-parameter tuning, and utilizing ML Flow for tracking experiments and models.
+- **Online Learning**:
+  - Implementing models that can learn continuously from new data.
+- **Reinforcement Learning**:
+  - Experimenting with a spike in utilizing reinforcement learning techniques.
+- **Deploy Model v1.0**:
+  - Deploying machine learning models with proper handover procedures and documentation.
+- **Feature Store v1.0**:
+  - Establishing a feature store for both offline and online serving of features.
+- **Model Serving**:
+  - Setting up both batch and online serving of models for different use cases.
+- **Observability**:
+  - Implementing monitoring, alerts, and dashboards to track model performance and health.
+- **Infrastructure**:
+  - Making necessary changes to the infrastructure to support model deployment patterns, including setting up CI/CD pipelines, versioning runtime environments, and customizing MLOps stacks.
+- **Quality**:
+  - Ensuring the quality of models through proper testing methodologies.
+- **Resources**:
+  - Managing computational resources efficiently and observing costs.
+- **Governance**:
+  - Establishing processes and frameworks for managing the entire product lifecycle, change management, incident response, and ensuring compliance with standards and conventions.
+- **Education**:
+  - Providing education and training on various aspects of MLOps and software engineering best practices.
+- **Other**:
+  - Handling additional tasks such as batch inference, real-time inference, and managing large files and data stores.
+- **Model Rebuilds**:
+  - Rebuilding models on a new platform, ensuring compatibility and optimization.
